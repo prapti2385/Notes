@@ -40,11 +40,17 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res
-        .status(401)
+        .status(400)
         .json({ success: false, message: "User doesnt exists" });
     }
 
-    const checkpassword = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Incorrect password" });
+    }
 
     const token = jwt.sign(
       { id: user._id },
@@ -52,16 +58,10 @@ router.post("/login", async (req, res) => {
       { expiresIn: "5h" }
     );
 
-    if (!checkpassword) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Incorrect password" });
-    }
-
     return res.status(200).json({
       success: true,
       token,
-      user: { name: user.name },
+      user: { name: user.name, email: user.email },
       message: "Login Successfully",
     });
   } catch (error) {

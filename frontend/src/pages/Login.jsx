@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
-const Signup = () => {
-  const [name, setName] = useState("");
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -12,34 +11,23 @@ const Signup = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/register",
-        { name, email, password }
+        "http://localhost:3000/api/auth/login",
+        { email, password }
       );
       if (response.data.success) {
-        navigate('/login')
+        localStorage.setItem("token", response.data.token);
+        navigate("/");
       }
-      console.log(response.data);
     } catch (error) {
       console.log(error.message);
     }
   };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="shadow p-6 w-80 bg-white">
-        <h2 className="text-2xl font-bold mb-4">Signup</h2>
+        <h2 className="text-2xl font-bold mb-4">Login</h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-gray-700 mb-2">
-              Name
-            </label>
-            <input
-              type="text"
-              placeholder="Enter Your Name"
-              required
-              className="w-full px-3 py-2 border border-gray-400"
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 mb-2">
               Email
@@ -66,10 +54,10 @@ const Signup = () => {
             type="submit"
             className="w-full bg-teal-600 text-white py-2 mb-2"
           >
-            Signup
+            Login
           </button>
           <p className="text-center">
-            Already Have Account? <Link to="/login">Login</Link>
+            Don't Have Account? <Link to="/register">Register</Link>
           </p>
         </form>
       </div>
@@ -77,4 +65,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Login;

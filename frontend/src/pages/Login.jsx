@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/ContextProvider";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -16,6 +18,7 @@ const Login = () => {
       );
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
+        login(response.data.user);
         navigate("/");
       }
     } catch (error) {

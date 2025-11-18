@@ -23,6 +23,7 @@ const Signup = () => {
       console.log(error.message);
     }
   };
+  
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="shadow p-6 w-80 bg-white">

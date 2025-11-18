@@ -1,12 +1,13 @@
 import React from "react";
 import { useState } from "react";
 
-const NoteModel = () => {
+const NoteModel = ({ closeModel, addNote }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    addNote({title, description});
   };
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
@@ -28,12 +29,18 @@ const NoteModel = () => {
           />
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
+            onClick={handleSubmit}
           >
             Add Note
           </button>
         </form>
-        <button className="mt-4 text-red-500">Cancel</button>
+        <button
+          className="mt-4 text-red-500 cursor-pointer"
+          onClick={closeModel}
+        >
+          Cancel
+        </button>
       </div>
     </div>
   );

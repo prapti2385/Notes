@@ -8,6 +8,7 @@ import NoteCard from "../components/NoteCard";
 const Home = () => {
   const [isModelOpen, setModelOpen] = useState(false);
   const [notes, setNotes] = useState([]);
+  const [currentNote, setCurrentNote] = useState(null);
 
   const fetchNotes = async () => {
     try {
@@ -26,7 +27,12 @@ const Home = () => {
     setModelOpen(false);
   };
 
-  const addNote = async ({ title, description }) => {
+  const onEdit = (note) => {
+    setCurrentNote(note);
+    setModelOpen(true);
+  };
+
+  const addNote = async (title, description) => {
     try {
       const response = await axios.post(
         "http://localhost:3000/api/note/add",
@@ -46,21 +52,72 @@ const Home = () => {
       console.log(error.message);
     }
   };
+
+  const editNote = async (id, title, description) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/api/note/${id}`,
+        {
+          title,
+          description,
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      if (response.data.success) {
+        fetchNotes();
+        closeModel();
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const deleteNote = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/api/note/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        fetchNotes();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
       <div className="grid grid-cols-1 md:grid-cols-3 px-8 pt-5 gap-6">
         {notes.map((note) => (
-          <NoteCard note={note} />
+          <NoteCard note={note} onEdit={onEdit} deleteNote={deleteNote} />
         ))}
       </div>
       <button
         className="bg-teal-500 text-white font-bold p-4 rounded fixed right-4 bottom-4 text-2xl cursor-pointer"
-        onClick={() => setModelOpen(true)}
+        onClick={() => {
+          setModelOpen(true);
+          setCurrentNote(null);
+        }}
       >
         +
       </button>
-      {isModelOpen && <NoteModel closeModel={closeModel} addNote={addNote} />}
+      {isModelOpen && (
+        <NoteModel
+          closeModel={closeModel}
+          addNote={addNote}
+          currentNote={currentNote}
+          editNote={editNote}
+        />
+      )}
     </div>
   );
 };

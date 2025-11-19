@@ -1,18 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 
-const NoteModel = ({ closeModel, addNote }) => {
+const NoteModel = ({ closeModel, addNote, currentNote, editNote }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  useEffect(() => {
+    if (currentNote) {
+      setTitle(currentNote.title);
+      setDescription(currentNote.description);
+    }
+  }, [currentNote]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    addNote({title, description});
+    if (currentNote) {
+      editNote(currentNote._id, title, description);
+    } else {
+      addNote(title, description);
+    }
   };
+
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
       <div className="bg-white p-8 rounded">
-        <h2 className="text-xl font-bold mb-4">Add New Note</h2>
+        <h2 className="text-xl font-bold mb-4">
+          {currentNote ? "Edit Note" : "Add New Note"}
+        </h2>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -32,7 +46,7 @@ const NoteModel = ({ closeModel, addNote }) => {
             className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
             onClick={handleSubmit}
           >
-            Add Note
+            {currentNote ? "Edit Note" : "Add Note"}
           </button>
         </form>
         <button

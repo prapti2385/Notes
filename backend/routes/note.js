@@ -26,6 +26,21 @@ router.post("/add", middleware, async (req, res) => {
   }
 });
 
+router.put("/:id", middleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateNote = await Note.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+
+    return res.status(200).json({ success: true, updateNote });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Cannot update note" });
+  }
+});
+
 router.get("/", async (req, res) => {
   try {
     const notes = await Note.find();
@@ -34,6 +49,18 @@ router.get("/", async (req, res) => {
     return res
       .status(500)
       .json({ success: false, message: "Notes not fetched successfully" });
+  }
+});
+
+router.delete("/:id", middleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Note.findByIdAndDelete(id);
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Cannot delete note" });
   }
 });
 

@@ -7,8 +7,10 @@ import NoteCard from "../components/NoteCard";
 
 const Home = () => {
   const [isModelOpen, setModelOpen] = useState(false);
+  const [filteredNotes, setFilteredNotes] = useState(false);
   const [notes, setNotes] = useState([]);
   const [currentNote, setCurrentNote] = useState(null);
+  const [query, setQuery] = useState("");
 
   const fetchNotes = async () => {
     try {
@@ -22,6 +24,16 @@ const Home = () => {
   useEffect(() => {
     fetchNotes();
   }, []);
+
+  useEffect(() => {
+    setFilteredNotes(
+      notes.filter(
+        (note) =>
+          note.title.toLowerCase().includes(query.toLowerCase()) ||
+          note.description.toLowerCase().includes(query.toLowerCase())
+      )
+    );
+  }, [query, notes]);
 
   const closeModel = () => {
     setModelOpen(false);
@@ -95,11 +107,11 @@ const Home = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <Navbar />
+      <Navbar setQuery={setQuery} />
       <div className="grid grid-cols-1 md:grid-cols-3 px-8 pt-5 gap-6">
-        {notes.map((note) => (
+        {filteredNotes.length > 0 ? filteredNotes.map((note) => (
           <NoteCard note={note} onEdit={onEdit} deleteNote={deleteNote} />
-        ))}
+        )) : <p>No Notes</p>}
       </div>
       <button
         className="bg-teal-500 text-white font-bold p-4 rounded fixed right-4 bottom-4 text-2xl cursor-pointer"

@@ -26,4 +26,15 @@ router.post("/add", middleware, async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  try {
+    const notes = await Note.find();
+    return res.status(200).json({ success: true, notes });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Notes not fetched successfully" });
+  }
+});
+
 export default router;

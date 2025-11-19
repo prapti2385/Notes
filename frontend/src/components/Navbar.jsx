@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/ContextProvider";
 
 const Navbar = ({ setQuery }) => {
-  const { user } = useAuth();
-  const handleLogout = () => {};
+  const { user, handleLogout } = useAuth();
+  
   return (
     <nav className="bg-gray-800 p-4 text-white flex justify-between items-center">
       <div className="text-xl font-bold">

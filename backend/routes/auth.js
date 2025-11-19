@@ -2,6 +2,7 @@ import express from "express";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import middleware from "../middleware/middleware.js";
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
@@ -68,6 +69,10 @@ router.post("/login", async (req, res) => {
     console.log(error.message);
     return res.status(500).json({ success: false, message: "Error in login" });
   }
+});
+
+router.get("/verify", middleware, async (req, res) => {
+  return res.status(200).json({ success: true, user: req.user });
 });
 
 export default router;

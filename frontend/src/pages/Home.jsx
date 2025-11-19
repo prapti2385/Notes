@@ -4,8 +4,11 @@ import NoteModel from "../components/NoteModel";
 import { useState } from "react";
 import axios from "axios";
 import NoteCard from "../components/NoteCard";
+import { toast } from "react-toastify";
+import { useAuth } from "../context/ContextProvider";
 
 const Home = () => {
+  const { user } = useAuth();
   const [isModelOpen, setModelOpen] = useState(false);
   const [filteredNotes, setFilteredNotes] = useState(false);
   const [notes, setNotes] = useState([]);
@@ -14,12 +17,21 @@ const Home = () => {
 
   const fetchNotes = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3000/api/note");
+      const { data } = await axios.get("http://localhost:3000/api/note/", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       setNotes(data.notes);
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (!user) {
+      setNotes([]);
+      setFilteredNotes([]);
+    }
+  }, [user]);
 
   useEffect(() => {
     fetchNotes();
@@ -59,6 +71,7 @@ const Home = () => {
       if (response.data.success) {
         fetchNotes();
         closeModel();
+        toast.success("Note Added");
       }
     } catch (error) {
       console.log(error.message);
@@ -80,6 +93,7 @@ const Home = () => {
       if (response.data.success) {
         fetchNotes();
         closeModel();
+        toast.success("Note edited");
       }
     } catch (error) {
       console.log(error.message);
@@ -99,6 +113,7 @@ const Home = () => {
 
       if (response.data.success) {
         fetchNotes();
+        toast.success("Note deleted");
       }
     } catch (error) {
       console.log(error);
@@ -109,9 +124,13 @@ const Home = () => {
     <div className="bg-gray-100 min-h-screen">
       <Navbar setQuery={setQuery} />
       <div className="grid grid-cols-1 md:grid-cols-3 px-8 pt-5 gap-6">
-        {filteredNotes.length > 0 ? filteredNotes.map((note) => (
-          <NoteCard note={note} onEdit={onEdit} deleteNote={deleteNote} />
-        )) : <p>No Notes</p>}
+        {filteredNotes.length > 0 ? (
+          filteredNotes.map((note) => (
+            <NoteCard note={note} onEdit={onEdit} deleteNote={deleteNote} />
+          ))
+        ) : (
+          <p>No Notes</p>
+        )}
       </div>
       <button
         className="bg-teal-500 text-white font-bold p-4 rounded fixed right-4 bottom-4 text-2xl cursor-pointer"

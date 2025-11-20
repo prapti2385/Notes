@@ -17,9 +17,12 @@ const Home = () => {
 
   const fetchNotes = async () => {
     try {
-      const { data } = await axios.get("https://scribe-lc1k.onrender.com/api/note/", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const { data } = await axios.get(
+        "https://scribe-lc1k.onrender.com/api/note/",
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
       setNotes(data.notes);
     } catch (error) {
       console.log(error);
@@ -30,11 +33,15 @@ const Home = () => {
     if (!user) {
       setNotes([]);
       setFilteredNotes([]);
+    } else {
+      fetchNotes();
     }
   }, [user]);
 
   useEffect(() => {
-    fetchNotes();
+    if (localStorage.getItem("token")) {
+      fetchNotes();
+    }
   }, []);
 
   useEffect(() => {

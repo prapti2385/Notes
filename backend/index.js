@@ -11,7 +11,9 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/note", noteRouter);
 
-app.listen(3000, () => {
-  connectToMongoDB();
-  console.log("Server listening!");
+const PORT = process.env.PORT || 3000;
+
+connectToMongoDB();
+app.listen(PORT, () => {
+  console.log("Server running on port", PORT);
 });

@@ -1,3 +1,7 @@
+import jwt from "jsonwebtoken";
+import User from "../models/User.js";
+
+
 const middleware = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -23,3 +27,6 @@ const middleware = async (req, res, next) => {
     return res.status(500).json({ success: false, message: "Invalid Token" });
   }
 };
+
+
+export default middleware;

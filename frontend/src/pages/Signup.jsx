@@ -12,18 +12,18 @@ const Signup = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/register",
+        "https://scribe-lc1k.onrender.com/api/auth/register",
         { name, email, password }
       );
       if (response.data.success) {
-        navigate('/login')
+        navigate("/login");
       }
       console.log(response.data);
     } catch (error) {
       console.log(error.message);
     }
   };
-  
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="shadow p-6 w-80 bg-white">

@@ -17,7 +17,7 @@ const Home = () => {
 
   const fetchNotes = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3000/api/note/", {
+      const { data } = await axios.get("https://scribe-lc1k.onrender.com/api/note/", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       setNotes(data.notes);
@@ -59,7 +59,7 @@ const Home = () => {
   const addNote = async (title, description) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/note/add",
+        "https://scribe-lc1k.onrender.com/api/note/add",
         {
           title,
           description,
@@ -81,7 +81,7 @@ const Home = () => {
   const editNote = async (id, title, description) => {
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/note/${id}`,
+        `https://scribe-lc1k.onrender.com/api/note/${id}`,
         {
           title,
           description,
@@ -103,7 +103,7 @@ const Home = () => {
   const deleteNote = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/api/note/${id}`,
+        `https://scribe-lc1k.onrender.com/api/note/${id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

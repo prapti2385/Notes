@@ -13,7 +13,7 @@ const Login = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/auth/login",
+        "https://scribe-lc1k.onrender.com/api/auth/login",
         { email, password }
       );
       if (response.data.success) {

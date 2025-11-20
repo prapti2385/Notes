@@ -55,7 +55,7 @@ router.post("/login", async (req, res) => {
 
     const token = jwt.sign(
       { id: user._id },
-      "secretkeyofnoteapp123##$$$$$^^^&&",
+      "prapticodes_12345_jwt_secret",
       { expiresIn: "5h" }
     );
 

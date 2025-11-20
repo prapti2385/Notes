@@ -8,7 +8,7 @@ const middleware = async (req, res, next) => {
       return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
-    const decoded = jwt.verify(token, "secretkeyofnoteapp123##$$$$$^^^&&");
+    const decoded = jwt.verify(token, "prapticodes_12345_jwt_secret");
     if (!decoded) {
       return res.status(401).json({ success: false, message: "Wrong Token" });
     }
